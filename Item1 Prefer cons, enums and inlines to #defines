@@ -1,0 +1,49 @@
+#define only be used when you need to control compilation:
+#define one 0
+#ifdef one
+  cout<<1
+#endif
+#ifndef one
+  cout<<2
+#endif
+1 will be printed as one is defined, not matter what value it defined for
+
+
+bad habit to use macro function:
+void int f(int a){
+    cout<<a;
+}
+
+#define PRINTBIGGER(a, b) f((a)>(b):(a),(b))
+
+int a = 5;
+int b = 0;
+PRINTBIGGER(++a, ++b);
+ 7 will be printed as 
+ 
+ Preprocessor will do substitution and a will be replaced with ++a, and because 6 > 0, 
+ the second (++a) is also executed and thus, a will be 7 eventually.
+ 
+ 
+ Another tricky thing about MACRO function is that, parenthese will be required:
+ 
+ #define SQR(x) (x*x);
+ 
+ int a = 5
+ SQR(3+a) will be (3+5*3+5)
+ 
+ therefore,
+ it should be SQR(x) ((x)*(x)), though inline function would be a better idea
+ inline int SQR(int x) { return x*x; }
+ 
+ 
+ 
+ enum suit{
+        spade = 1,
+        hear = 2,
+        clue = 3,
+        diamond = 4,
+ }
+ 
+ enum suit a;
+ a = spade; (same as a = 1)
