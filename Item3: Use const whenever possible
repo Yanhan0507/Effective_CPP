@@ -1,6 +1,7 @@
 If the word const appear to left of the asterisk, what it points to is a const; 
 if the word const appear to the right of the asterisk, the pointer itself is a const
 
+
 use const is a good habit:
 for example:
 const operator*(T a, T b);
@@ -9,9 +10,11 @@ if(a*b = c) will throw an error,
 though no one will write statement like this, but someone may want to write a*b == c but accidantly write a*b=c
 we will be able to throw an error in this way.
 
-const function wont be able to change any non-static data memeber, if you really need 
+const member function wont be able to change any non-static data memeber, if you really need 
 to make some changes to some data members and still want to make it const member function
 use the keyword, mutable
+
+Const object will call const member function while non-const object will call non-const member function
 
 
 if the source code of two functions are identical and only differnence is that one is const and the other is not
