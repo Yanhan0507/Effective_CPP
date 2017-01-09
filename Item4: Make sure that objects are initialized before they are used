@@ -18,12 +18,11 @@ if T is not POD, then member initialization list is faster
 
 For T t;
 
-it is not in the class,
-if t is a Plain old data, t is not intialized
+it is not in the class:
+if t is a Plain old data, t is not intialized usually
 if t is a object, default constructor is called
 
-is it is in the class
-
+is it is in the class:
 Class A{
    T x;
    K y;
@@ -31,8 +30,9 @@ Class A{
     x = t  //worse
 }
 }
-t is not initializaed as we just defined a class and may not use this t; so constrcutor is not invoked for t and thus, 
-it's better to use member list initialization 
+t will not be initialized as we just defined a class and may not use this t 
+(make no sense to call default constructor to initialize it); so constrcutor is not invoked for t and thus, 
+it's better to use member list initialization later
 
 
 
