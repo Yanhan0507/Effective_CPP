@@ -1,0 +1,43 @@
+declaration, definition, initialization 
+
+declaration  memory is not allocated
+definition   memory is allocated
+initialization  kinda link assignment
+
+
+class A{
+T x;
+A(T t):x(t) // better{
+    x = t  //worse
+}
+
+for assignment, default constructor will be invoked for non built-in type for initialization 
+for member initialization list: just a single call to copy constructor
+if T is Plain old data, then no difference, as there is no initialization for built-in type
+if T is not POD, then member initialization list is faster
+
+For T t;
+
+it is not in the class,
+if t is a Plain old data, t is not intialized
+if t is a object, default constructor is called
+
+is it is in the class
+
+Class A{
+   T x;
+   K y;
+   A(T t):x(t) // better{
+    x = t  //worse
+}
+}
+t is not initializaed as we just defined a class and may not use this t; so constrcutor is not invoked for t and thus, 
+it's better to use member list initialization 
+
+
+
+
+Initialization will based on the declaration order, and this is true even data members are listed in different order.
+Say, x will also be initializaed before y, and thus, better to write like A(_x,_y):x(_x),y(_y)  rather than 
+A(_y, _x):y(_y),x(_x)  as the initialization order would not be affected
+
