@@ -1,4 +1,4 @@
-Pure desturctor for base class
+virtual desturctor for base class
 
 pure virtual function implicitly yields an abstract class
 using virtual function to avoid memory leak
