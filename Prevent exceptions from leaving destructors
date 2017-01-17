@@ -1,0 +1,25 @@
+Destructors should not emit exceptions as it might lead to leaks
+Destructor should catch this kind of exception (swallow them or terminate the program)
+
+
+some operations may lead to exception. For those kind of operations, we may want to provide another way to do this operation.
+Like, con.close() we can ask user to close the connection themselves, and if they dont, destructor will take care of it.
+We need a bool like "bool closed = false"
+
+
+class A 
+
+close(){
+  ...
+  closed = true;
+}
+
+
+
+~A(){
+  if(!closed){
+    close();   
+  }
+}
+
+provide user an opportunity to do it themselves
