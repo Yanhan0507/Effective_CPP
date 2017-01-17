@@ -1,3 +1,5 @@
+Pure desturctor for base class
+
 pure virtual function implicitly yields an abstract class
 using virtual function to avoid memory leak
 class not designed to be a base class should not have a virtual destructor. virtual destrcutor will require vptr and vtable
