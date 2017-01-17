@@ -1,0 +1,8 @@
+pure virtual function implicitly yields an abstract class
+using virtual function to avoid memory leak
+class not designed to be a base class should not have a virtual destructor. virtual destrcutor will require vptr and vtable
+which will increase the cost of each object. (but if this class already had a vitrual function, it's fine)
+
+Any class with virtual function should almost certainly have a virtual destructor 
+1 having virtual function means, designed to be a base class
+2 having virtual function means already had a vptr already, so no extra cost for vptr to have this virtual destructor
