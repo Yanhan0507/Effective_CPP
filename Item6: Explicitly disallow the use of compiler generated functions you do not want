@@ -1,0 +1,11 @@
+Some objects are inherently unique and should disallow the copy assignment and constructor. 
+The way to hide the copy assignment and constructor of compile version is to explictly define ur own version, 
+and keep it private. Member and friend can still call this function. If you dont want anyone use it, declare it as private
+and dont implement it.
+
+
+
+HomeForSale(const HomeForSale&);
+
+
+convention, when u dont want to implement a function, dont give it a parameter name when declaring it.
