@@ -1,0 +1,65 @@
+  Constructor and destructor should not call virtual function.
+  
+  Say, if constructor use virtual function of derived type, then problem would be raised:
+  the base class is initialized before derived class, and at this time(constructor of base class being called),
+  the data members of derived class are still not initialized correctly, then, it may lead to some unexpected behaviors.
+  
+  
+  
+#include<iostream>  
+#include<string>  
+  
+using namespace std;  
+  
+class Transaction                              
+{  
+public:  
+    Transaction(const string& logInfo);  
+    void logTransaction(const string& logInfo) const; //non-virtual         
+    static string createLogString(string parameters)  
+    {  
+        return parameters;  
+    }  
+};   
+  
+Transaction::Transaction(const string& logInfo)   
+{  
+    logTransaction(logInfo);                              
+}  
+void Transaction::logTransaction(const string& logInfo) const  
+{  
+    cout<<"log " + logInfo + " info successfully!"<<endl;  
+}  
+  
+class BuyTransaction : public Transaction       
+{  
+public:  
+    BuyTransaction(string parameters): Transaction(createLogString(parameters)) {}   
+    
+        private static:  //safe to keep it as static
+      createLogString(parmeters){
+        return "sell" + parameters  // the specific info can be added there
+      }
+private:  
+        static createLogString(parmeters){
+        return "buy" + parameters  // the specific info can be added there
+      }
+};   
+  
+class SellTransaction : public Transaction     
+{  
+public:  
+    SellTransaction(string parameters): Transaction(createLogString(parameters)) {}     // specific info can be added to this static method
+private:  //safe to keep it as static
+  static createLogString(parmeters){
+        return "sell" + parameters  // the specific info can be added there
+      }
+};                                        
+  
+int main()  
+{  
+    Transaction *action;  
+    action = new BuyTransaction("transation");             
+  
+    action = new SellTransaction("transaction");  
+}   
