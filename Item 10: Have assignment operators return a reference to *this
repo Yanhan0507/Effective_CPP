@@ -1,0 +1,6 @@
+Have assignment operators return a reference to *this.
+Say, copy assignment have to return *this.
+
+This is just a convention 
+
+a = b = c  (a = (b = c))  right association, return the left-hand argument.
