@@ -1,0 +1,6 @@
+If you wanna implement a copy assignment or copy constructor yourself, you need to copy ALL data members. including 
+all data members and members in base class.
+Even though, you add some new data members in the future, you need to also make corresponding changes in assignment and 
+constructor. Complier wont warn/remind you to do so.
+you may wanna to remove code duplication, but dont let one to call the other (copy constructor to call copy assignment, 
+it makes no sense) you can make a third function to do so.
