@@ -1,0 +1,33 @@
+at fitst glance, assginment to itself looks stupid. But it may happen implicitly: a[i] = a[j]  (i == j)
+
+pa = pb, pa and pb are actually the same thing because of aliasing.
+
+T::operator(T& rhs)
+{
+  delete this->sth
+  this->sth = new STH(*rhs.sth)
+  return *this
+}
+// can be problematic when it is self-assignment and in other words, rhs->sth has already been removed.
+
+ways to fix it:
+
+check at the very beginning: 
+if(this == &rhs)  rethrn *this  // directly
+but it's not exception safe, as if sth wrong happened during newSTH, this->sth has already been removed
+
+ordering:
+  tmp = this->sth
+  this->sth = new STH()
+  delete tmp         
+  return *this
+this is both exception-safe and self-assignment safe
+  
+hard to say first two, which one is more efficient. depends on how often self-assignment would happen
+
+
+copy and swap
+
+T tmp(rhs)
+swap(tmp)
+return *this
