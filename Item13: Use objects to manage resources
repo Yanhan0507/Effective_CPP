@@ -1,5 +1,5 @@
 Use objet to manage resource (memory, file descriptors, mutex locks, fonts and brushed in GUI, database connections).
-
+Resource acquisition is initialization (RAII)
 Reason:
 Object (unless you use the new keyword) is in stack, and when it is out of scope, stack corresponding 
 to this scope(say, function) will be destroyed. Therefore, using class to manage resource and having a good
