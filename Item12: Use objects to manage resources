@@ -1,0 +1,22 @@
+Use objet to manage resource (memory, file descriptors, mutex locks, fonts and brushed in GUI, database connections).
+
+Reason:
+Object (unless you use the new keyword) is in stack, and when it is out of scope, stack corresponding 
+to this scope(say, function) will be destroyed. Therefore, using class to manage resource and having a good
+destructor will make sure that there is no memory leaking.
+
+For ptr = new int(a)... when out of scope, ptr itself will be poped out from the stack, but the memory in the heap
+will never be leaked, and thus, caused memory leak.
+
+
+We can use shared_ptr and auto_ptr
+
+shared_ptr cannot break cycle, but it's more intuitive.
+
+auto_ptr: kinda like move constructor
+auto_ptr<T>ptr(b)   b will be assigned to ptr, and b will be nullptr.
+
+
+
+at the end of the day, for auto_ptr and shared_ptr, delele will be called the actually resource, not delete[].
+Therefore, it cannot be used for array (char[], int[]), using string or vector in this case.
