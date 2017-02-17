@@ -1,0 +1,22 @@
+sometimes, the default behavior of auto_ptr and shared_ptr (delete the resource, even though 
+we can specify deletor for shared_ptr) are not good, we can write our RAII class.
+
+
+like 
+
+Mutex m
+...
+{
+  lock ml(&m)
+}   out of cope, destructor of ml will be called and we can unlocy mutex in the desturctor we wrote for this RAII class.
+
+
+
+
+Tricky thing here is that: 
+how can you define copy behabior:
+
+1) rf, unlock/delete it when rf is zero
+2) prohibit copy, it makes sense for lock usually, (private copy constructor and assignment).
+3) transfer ownership like auto_ptr
+4) dont do anything (make as many copies as you want)
