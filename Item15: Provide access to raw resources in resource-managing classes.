@@ -1,0 +1,22 @@
+RAII class is good but real world is not perfect. Some existing API may be already designed for raw ptrs.
+Then, RAII class need to have way to provide access to raw ptr.
+
+
+foo(T* p)
+Shared_ptr<T> ptr(&x)
+
+foo(ptr.get())
+
+ operator T()  { return ptr; }
+
+explict conversation:
+provide a get method, like what shared_ptr did
+
+implicit covnersation: 
+ptr can be converted to T(the type of the actual resource, the raw ptr directly)
+Which can be problematic:  
+Font f1(getFont())        (f1 is a wrapper of fonthandle, fonthandle can be considered as real resource, or say, "raw ptr")
+FontHandle f2 = f1   (we want write something like Font f2 = f1, but write FontHandle by mistake), compiler wont be able to
+identiify it for us as it will implicitly convert Font to FontHandle without notice.
+
+
