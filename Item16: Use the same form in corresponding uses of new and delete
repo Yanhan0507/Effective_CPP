@@ -5,4 +5,4 @@ string *p = new string[10] delete[] p
 sometimes, typedef makes the situation even more confusing   ( typedef std:sting AssressLines[4])
 string *s = new AddressLines   // so u need to be well-documented about your code
 
-try to use class instead (vector, string to avoid array-related operation)
+try to use class instead (vector, string to avoid array-related memory manupulation)
