@@ -1,0 +1,17 @@
+Suppose we have a function:
+void processWidget(std::tr1::shared_otr<Widget>pw, int priority)
+
+and we call it in this way:
+
+processWidget(std::shared_ptrWidget<(new Widget), priority())
+
+the problem here is that:
+C++ compiler will determine the order of these three calls, which developers may not know
+Say, if this is the case:
+1) new Widget
+2) priority()
+3) std::shared_ptrWidget constructor
+
+in this case, if 2) throws an exception, then this new widget will be lost.
+
+Try to write this kinda code in standalone statements.
