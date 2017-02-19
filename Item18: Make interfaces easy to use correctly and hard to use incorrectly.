@@ -1,0 +1,49 @@
+Guiline to design an interface: they should be easy to use correctly and hard to use incorrectly.
+
+1)
+public class Date{
+  public:
+    Date(int month, int date, int year);
+}
+
+Date d(15, 5, 1970)   <- easy to use incorrectly
+
+
+Date d(Month(5), Day(15), Year(1995))
+
+Month{
+  static Month Jan(){return Month(1);}
+  static Month Feb(){return Month(1);}
+  ...
+  private:
+  explicit Month(int m);
+}
+
+Date d(Month::May(), Day(15), Year(1970))
+(better than enum, as enum can actullay be treated as int)
+
+add const, can also prevent use errors
+
+
+
+2)
+Java    array.length,  list.size   it's not a good design, it should be more consistent
+
+Investment* getInvest()
+
+not a good way:
+1)user may forget to delete this ptr later.
+2)user may need to use some specific deletors to delete this ptr, which user may not even notice.
+3)it may cause some cross dll problems, (ptr deleted in a dll different from the dll allocating the memory).
+
+Shared_ptr<Investment*> getInvest() is better as we should be able to deal with the above 3 issues.  
+1) it will be removed once we done with the ptr.
+2) we can pre-select the deletor.
+3) ?
+
+3)
+shared_ptr has some problems: bigger, slower and user memory memeory than raw ptr
+1) memory overhead (RC)
+2) thread synchronization overhead when invoking rc in multithreaded environment, 
+though it can be disabled by defining a preprocessor symbol.
+3) memory to keep deleter-specific date (a virtual function call when invoking deleter)
