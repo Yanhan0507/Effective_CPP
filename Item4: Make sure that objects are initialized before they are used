@@ -26,8 +26,8 @@ is it is in the class:
 Class A{
    T x;
    K y;
-   A(T t):x(t) // better <- construct a default instance and use assignment{
-    x = t  //worse
+   A(T t):x(t) // better 
+    x = t  //worse <- construct a default instance and use assignment{
 }
 }
 t will not be initialized as we just defined a class and may not use this t 
