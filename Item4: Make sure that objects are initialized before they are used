@@ -26,7 +26,7 @@ is it is in the class:
 Class A{
    T x;
    K y;
-   A(T t):x(t) // better{
+   A(T t):x(t) // better <- construct a default instance and use assignment{
     x = t  //worse
 }
 }
