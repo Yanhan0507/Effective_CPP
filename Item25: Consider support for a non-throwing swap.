@@ -104,6 +104,20 @@ namespace WidgetStuff {
 }
 
 
+Things to remember:
+Provide a swap member function when std:swap would be inefficient for your type. Make sure your 
+swap does not throw exceptions.This swap member function will be later used by template specification(specific class) 
+or overloading version(if the class is template) of swap later.
 
+If you offer a member swap, also offer a non-member swap that calls the member. For classes(not templates), specialize
+std::swap, too.
+
+When calling swap, employ a using declaration for std::swap, then call swap without namespace qualication. 
+(C++'s name lookup rules ensure that this will find any T-specific swap at global scope or in the same 
+namespace as the type T. Compiler will choose the most specific one. So add "using std::swap;  " but dont write something like
+std::swap(pImpl, other.pImpl); )
+
+It's fine to totally specialize std templates for user-defined types but never try to add something completely
+new to std.
 
 
