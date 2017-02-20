@@ -34,10 +34,27 @@ t will not be initialized as we just defined a class and may not use this t
 (make no sense to call default constructor to initialize it); so constrcutor is not invoked for t and thus, 
 it's better to use member list initialization later
 
-
-
-
 Initialization will based on the declaration order, and this is true even data members are listed in different order.
 Say, x will also be initializaed before y, and thus, better to write like A(_x,_y):x(_x),y(_y)  rather than 
 A(_y, _x):y(_y),x(_x)  as the initialization order would not be affected
 
+
+student{
+ string name;
+	student(const string& s){
+		name = s;
+	}
+}
+<-> It's actually the same as below   
+student{
+ string name;
+	student(const string& s): name(){
+		name = s;
+	}
+}
+<-> 
+student{
+ string name;
+	student(const string& s): name(s){
+	}
+}
