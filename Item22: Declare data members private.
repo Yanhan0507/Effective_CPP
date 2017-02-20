@@ -1,0 +1,9 @@
+Encapsulation basically means making data members private.
+If we allow user to access data members directly, it could make us very hard to change the code in the future,
+since we dont want to affect the existing functionality.
+Declare it as "Protected" means all of the children may use it, and all of the code rely on these children will also be affected.
+Two takeaways:
+
+1) Declare data members private. It gives clients syntactically uniform access to data, affords find-grained access control,
+allows invariants to be enforced and offers class authors implementation flexibility.
+2) Protected is no more encapsulated than public.
