@@ -1,0 +1,6 @@
+Object-oriented principles dictate that data should be as encapsulated as possible.
+Counterintuitively, the member function usually yields less encapsulation than the non-member function.
+
+Prefer non-member non-friend functions to member functions. Doing so increases encapsulation, packaging flexibility,
+and functional extensibility.
+
