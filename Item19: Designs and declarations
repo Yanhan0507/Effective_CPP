@@ -1,0 +1,17 @@
+A couple of issues to think before designing a new class.
+
+Good types have a natural syntax, intuitive semantics and one or more efficient implementations.
+
+How should objects of your new type be created and destroyed?
+how should object initialization differ from object assignment?
+What does it mean for objects of your new type to be passed by value?
+What are the restrictions on legal values for your new type?
+Does your new type fit into an inheritance graph?
+What kind of type conversions are allowed for your new type?
+What operators and functions make sense for the new type?
+What standard functions should be disallowed?
+Who should have access to the members of your new type?
+What is the “undeclared interface” of your new type?
+How general is your new type?
+Is a new type really what you need?
+
