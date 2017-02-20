@@ -1,0 +1,21 @@
+Function parameters are initialized with copies of the actual frguments, and function callers get back a copy of the value
+returned by the function. 
+See the below example:
+
+bool validate(Student s);
+
+Student a;
+bool isAOK = validate(a);
+
+Copy constructor of Student will be called to initialize the "Student S"
+1) This might be expensive, as copy constructor can be expensive.
+2) Keep in mind that the value of "a" will be not changed anyway.
+
+we can rewrite it in this way:
+bool validate(const Student& s);
+1) it will only pass in a const reference
+2) const is necessary as we need to make sure the user cannot change the value of s, 
+as what it used to be in previous mechanism
+
+Sometimes, pass by value is even more efficient:
+built-in types, STL iterator and function objects.
