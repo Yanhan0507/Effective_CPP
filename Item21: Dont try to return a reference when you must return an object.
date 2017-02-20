@@ -1,0 +1,37 @@
+1 Return a reference/ptr to a local variable is dangerous, 
+as the object that ptr points to would be destroyed when out of scope.
+
+2
+Const Rational& operator*(const Rational& lhs, const Rational& rhs)
+{
+  Rational *result = new Rational(lhs.n * rhs.n, lhs.d*rhs.d);
+  return result;                                  
+  // 2 consturctor calls: 1) result = new Rational 2) copy constructor for return statement
+}
+Return a ptr to new object may also not be a good idea, as user may forget to delete the ptr.
+And in some cases, meomory leaking may happen without notice.
+w = x*y*z   the memory allocated for x*y will be leaked
+
+3return a static object is also a bad idea
+class{
+  static Rational Result;
+  Const Rational& operator*(const Rational& lhs, const Rational& rhs)
+  {
+    result = Rational(lhs.n * rhs.n, lhs.d*rhs.d);
+    return result;                                  
+    // 2 consturctor calls: 1) result = new Rational 2) copy constructor for return statement
+  }
+}
+some may think static object dont have out-of-scope problem. But it may lead to 2 different problem
+  1) not thread-safe
+  2) (a*b)==(c*d) will also be true
+  
+4
+Good way:
+Const Rational operator*(const Rational& lhs, const Rational& rhs){
+  return Rational(lhs.n*rhs.n, lhs.d*rhs.d)
+}
+At the first glance, it may incur 2 ctor calls. But "c++ compiler return value optimization technique" may actually 
+make you program run faster.
+
+
