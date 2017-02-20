@@ -52,7 +52,7 @@ student{
 		name = s;
 	}
 }
-<-> 
+<-> Therefore, it's better.
 student{
  string name;
 	student(const string& s): name(s){
