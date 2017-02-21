@@ -1,0 +1,34 @@
+Defining an unused variable may be trivial. We better off postponing definition until we know we ll need it.
+It would be even better if we can know initialization arguments for it.
+
+
+void foo(){
+  String x; // define it after if check
+  if(){
+  return;
+  }
+  String x;  
+  x = "aa"   // default ctor + assignment = not efficient
+  String x = "aa" or String x{"a"}  // only copy ctor will be called -> the most efficient way
+  //here u define it late enough so that you not only know you need it, but also sure that how it should
+  //be initialized.
+}
+
+1)
+
+Sting s;
+for(int i = 0; i < n; ++i)
+{
+  s = "a"
+}
+
+2)
+for(int i = 0; i < n; ++i)
+{
+  String s = "a"
+}
+
+
+1)  1 default ctor + 1 dtor + n assignment
+2)  n copy ctor + n dtor
+
