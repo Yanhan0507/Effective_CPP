@@ -32,3 +32,11 @@ the other. All pointer conversions are allowed: neither the content pointed nor 
 Static cast:
 it will not do runtime check and cannot throw away the constness. Except these two scenarios, it can basically do everything.
 
+Some programmers may believe that casts do nothing but tell compliers to treat one type as another, but this is mistaken.
+
+Derived d;
+Base *pb = &d;
+Sometimes, the value of this two prts(d and pb) may not be the same. An offset may be applied at runtime to the 
+Derived* ptr to get the correct Base* ptr value.
+
+
