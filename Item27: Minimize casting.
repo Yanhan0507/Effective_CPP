@@ -1,0 +1,34 @@
+Prefer c++ style casts to old-style casts. Easier to see and more specific about what they do.
+
+Const_Cast: cast away the constness of objects. The ptr converted to and the ptr converted from should be the same type,
+and the only difference is the constness.
+
+Dynamic_cast: will do runtime check, thus, will incur runtime cost.
+class Base { virtual void dummy() {} };
+class Derived: public Base { int a; };
+
+int main () {
+  try {
+    Base * pba = new Derived;
+    Base * pbb = new Base;
+    Derived * pd;
+
+    pd = dynamic_cast<Derived*>(pba);
+    if (pd==0) cout << "Null pointer on first type-cast.\n";
+
+    pd = dynamic_cast<Derived*>(pbb);
+    if (pd==0) cout << "Null pointer on second type-cast.\n";   
+    // wrong, coz it's actually not a Base and thus, will not pass runtime check, and eventually return a nullptr
+
+  } catch (exception& e) {cout << "Exception: " << e.what();}
+  return 0;
+}
+
+
+Reinterpret_cast: low-level casts (binary). he operation result is a simple binary copy of the value from one pointer to 
+the other. All pointer conversions are allowed: neither the content pointed nor the pointer type itself is checked.
+
+
+Static cast:
+it will not do runtime check and cannot throw away the constness. Except these two scenarios, it can basically do everything.
+
