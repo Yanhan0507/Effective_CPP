@@ -1,0 +1,5 @@
+Avoid returning handles(references, pointers, or iterators) to object internals. 
+Not returning handles increases encapsulation, helps const memver act const.
+
+Const Point *pUpperLeft = &(boundingBox(*pgo).upperLeft())
+dereference pUpperLeft will be dangerous as at the end of this statement, the temporary object will be destroyed.
