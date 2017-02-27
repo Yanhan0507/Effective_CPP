@@ -1,0 +1,52 @@
+The idea behid an inline function is to replace each call of that function with its code body. 
+
+It can help avoid the cost of a function call. Also, compiler optimizations are typically designed for 
+streches of code that lack function calls (inline function can help compiler optimizations)
+It will increase the size of object code: it can cause code bloat.
+
+Two ways to do inline:
+1) implicit: define a function inside a class definition
+2) explicite: use the inline keyword
+
+Limit most inlining to small, frequently called functions. This facilitates debugging and binary upgradability, minimizes 
+potential code bloat and maximizes the chances of greater program speed.
+Dont declare functon templates inline just because they appear in header files.
+
+Inline usually happens to .h file as most build environments fo inlining during compliation.
+
+
+Function ptr requires that the function body exists.
+
+
+Sometimes, compiler will generate some code to ensure what must happen (even though people may not necessarily know how it's
+gonna happen)
+Base{
+string bm1, bm2;
+...
+}
+
+Derived{
+string dm1, dm2, dm3;
+}
+
+Derived::Derived(){
+    Base::Base();
+    try{ dm1.std::string::string(); }
+    catch(...){
+        Base::Base();
+        throw;
+    }
+    try{ dm2.std::string::string(); }
+    catch(...){
+        data1.std::string::~string();
+        Base::~Base();
+        throw;
+    }
+    ...
+}
+
+
+The compiler generated some code which makes inline not a good idea. In this case, if ~string is a inline function, we may need
+to many copies of it.
+
+
