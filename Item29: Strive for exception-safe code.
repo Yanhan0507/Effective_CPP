@@ -1,0 +1,79 @@
+Three different levels of exception-safe function:
+1) the basic guarantee: all invariants are satisfied. However, the exact state of the program may not be predictable. 
+No objects or data structures become corrupted, and all objects are in an internally consistent state.
+2) the stong guarantee: calls to such functions are atomic in the sense if they succeed, they succeed completely, and
+if they fail, the program state is as if they'd never been called.
+3) the nothrow guarantee: promise never to throw exceptions, because they always do what they promise to do. All operations
+on built-in types are nothrow.
+
+bad version:
+void PrettyMenu::changeBackground(std::istream& imgSrc)
+{
+  lock(&mutex);                      // acquire mutex (as in Item 14)
+
+  delete bgImage;                    // get rid of old background
+  ++imageChanges;                    // update image change count
+  bgImage = new Image(imgSrc);       // install new background
+
+  unlock(&mutex);                    // release mutex
+}
+better version:
+void PrettyMenu::changeBackground(std::istream& imgSrc)
+{
+  Lock ml(&mutex);                 // from Item 14: acquire mutex and
+                                   // ensure its later release
+  delete bgImage;                  
+  bgImage = new Image(imgSrc);
+  ++imageChanges;                 // change the state only if the state changed successfully
+}
+
+
+copy and swap: (a good way to provide the strong guarantee: change everything successfully or remain everything unchanged)
+make a copy of the object you want to modify, then make all needed changes to the copy. If any of the modifying operations
+throws an exception, the original object remains unchanged. After all the changes have been successfully completed, swap the
+modified object with the original in a non-throwing operation.
+
+struct PMImpl {                               
+  std::tr1::shared_ptr<Image> bgImage;        
+  int imageChanges;                           
+};
+
+class PrettyMenu {
+  ...
+
+private:
+  Mutex mutex;
+  std::tr1::shared_ptr<PMImpl> pImpl;
+};
+
+void PrettyMenu::changeBackground(std::istream& imgSrc)
+{
+  using std::swap;                            // see Item 25
+
+  Lock ml(&mutex);                            // acquire the mutex
+
+  std::tr1::shared_ptr<PMImpl>                // copy obj. data
+    pNew(new PMImpl(*pImpl));
+
+  pNew->bgImage.reset(new Image(imgSrc));     // modify the copy
+  ++pNew->imageChanges;
+
+  swap(pImpl, pNew);                          // swap the new
+                                              // data into place
+
+}                                             // release the mutex
+
+
+Sometimes, it's hard to provide strong guarantee:
+
+void someFunc()
+{
+  ...                                     // make copy of local state
+  f1();
+  f2();
+  ...                                     // swap modified state into place
+}
+
+if f1 or f1 cannot provide strong guarantee, or even if it can provide stong guarantee, but it may change the state
+of the object or even something outside the object(say commits to database). Say, if it writes successfully to database
+already, then, we cannot undo it anymore, as the data may be read by someone already.
