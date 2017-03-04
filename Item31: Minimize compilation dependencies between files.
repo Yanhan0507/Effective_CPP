@@ -1,0 +1,64 @@
+In compile time, the size of each class need to be determined. Thus, if you include these attributes in the class or any of 
+these class(string, Date, Address) has been changed, the Person need to ve recompiled and all class that denpend on Person will
+also need to be recompiled.
+
+This chapter is mainly about how to design library code, instead of, client code.
+
+class Person {
+public:
+  Person(const std::string& name, const Date& birthday,
+         const Address& addr);
+  std::string name() const;
+  std::string birthDate() const;
+  std::string address() const;
+  ...
+
+private:
+      std::string theName;        // implementation detail
+      Date theBirthDate;          // implementation detail
+      Address theAddress;         // implementation detail
+};
+
+
+One way to do so(like what happened in java as everything is in a pointer)
+#include <string>                      // standard library components
+                                       // shouldn't be forward-declared
+
+#include <memory>                      // for tr1::shared_ptr; see below
+
+class PersonImpl;                      // forward decl of Person impl. class
+class Date;                            // forward decls of classes used in
+
+class Address;                         // Person interface
+class Person {
+public:
+ Person(const std::string& name, const Date& birthday,
+        const Address& addr);
+ std::string name() const;
+ std::string birthDate() const;
+ std::string address() const;
+ ...
+
+private:                                   // ptr to implementation;
+  std::tr1::shared_ptr<PersonImpl> pImpl;  // see Item 13 for info on
+};                                         // std::tr1::shared_ptr
+
+
+
+
+class Date;                        // class declaration
+
+Date today();                      // fine — no definition
+void clearAppointments(Date d);    // of Date is needed
+
+When someone uses the function above, he/she will create a date object himself/herself. So we dont need to worry about 
+providing implementation details ourselves.
+
+
+Using interface to separate interface from handle class: clients of interface need not to recompile unless the interface 
+class's interface is modified. 
+
+On the other hand, it costs you some speed at runtime, plus, some additional memory per object.
+
+Things to remember: the general idea behind minimizing compilation dependencies is to depend on declarations instead 
+of definitions. Two approaches based on this idea are handle classes(ptr) and interface classes.
