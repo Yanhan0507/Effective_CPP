@@ -1,0 +1,7 @@
+"Public inheritance means "is-a". Commit this rule to memory"
+Private inheritanve means something entirely different.
+
+
+Things to remember:
+public inheritance means "is-a"   Everything that applies to base classes must also apply tp derived classes, because every 
+derived class object is a base class object.
