@@ -1,0 +1,110 @@
+class Base {
+private:
+int x;
+
+public:
+virtual void mf1() = 0;
+virtual void mf1(int);
+virtual void mf2();
+
+void mf3();
+void mf3(double);
+...
+
+};
+
+
+
+class Derived: public Base {
+public:
+virtual void mf1();
+void mf3();
+void mf4();
+...
+
+};
+
+
+Derived d;
+
+int x;
+
+
+
+...
+
+d.mf1(); // fine, calls Derived::mf1
+d.mf1(x); // error! Derived::mf1 hides Base::mf1
+d.mf2(); // fine, calls Base::mf2
+d.mf3(); // fine, calls Derived::mf3
+d.mf3(x); // error! Derived::mf3 hides Base::mf3
+
+
+
+
+The function name in the scope of Devired class can even block the funtions in the basic class 
+which take different parameter types and it also applies regardless of whether the functions are
+virtual or non-virtual. 
+
+using statements can fix this:
+
+class Derived: public Base {
+
+public:
+
+using Base::mf1; // make all things in Base named mf1 and mf3
+
+using Base::mf3; // visible (and public) in Derived's scope
+...
+}
+
+
+
+Names in derived classes hide names in base classes. Under public inheritance, this is never desirable.
+
+To make hidden names visible again, employ using declarations or forwarding functions.
+
+
+
+
+
+http://www.cnblogs.com/txwsh1/archive/2008/06/28/1231751.html:
+
+Override/overload/hiding/static binding/dynamic binding
+
+#include <iostream.h>  
+    class Base  
+{  
+public:  
+    virtual void f(float x){ cout << "Base::f(float) " << x << endl; }  
+void g(float x){ cout << "Base::g(float) " << x << endl; } 
+            void h(float x){ cout << "Base::h(float) " << x << endl; }  
+};  
+    class Derived : public Base 
+{  
+public:  
+    virtual void f(float x){ cout << "Derived::f(float) " << x << endl; }  
+void g(int x){ cout << "Derived::g(int) " << x << endl; } 
+            void h(float x){ cout << "Derived::h(float) " << x << endl; } 
+};  
+
+
+
+void main(void)  
+{  
+Derived  d;  
+Base *pb = &d;  
+Derived *pd = &d; 
+ 
+// Good : behavior depends solely on type of the object  
+pb->f(3.14f); // Derived::f(float) 3.14  
+pd->f(3.14f); // Derived::f(float) 3.14  
+
+// Bad : behavior depends on type of the pointer  
+pb->g(3.14f); // Base::g(float) 3.14  
+pd->g(3.14f); // Derived::g(int) 3        (surprise!)  
+
+// Bad : behavior depends on type of the pointer  
+pb->h(3.14f); // Base::h(float) 3.14      (surprise!)  
+pd->h(3.14f); // Derived::h(float) 3.14  
+} 
