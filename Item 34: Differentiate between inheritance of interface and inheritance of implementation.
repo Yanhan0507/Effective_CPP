@@ -1,0 +1,61 @@
+As a class designer, you sometimes want derived classes to inherit only the interface (declaration) of a member function. 
+Sometimes you want derived classes to inherit both a function's interface and implementation, but you want to allow them 
+to override the implementation they inherit. And sometimes you want derived classes to inherit a function's interface and 
+implementation without allowing them to override anything.
+
+class Shape {
+
+public:
+
+virtual void draw() const = 0;
+
+
+
+virtual void error(const std::string& msg);
+
+
+
+int objectID() const;
+
+
+
+...
+
+};
+
+
+
+class Rectangle: public Shape { ... };
+
+
+
+class Ellipse: public Shape { ... };
+
+The purpose of declaring a pure virtual function is to have derived classes inherit a function interface only.
+
+The purpose of declaring a simple virtual function is to have derived classes inherit a function interface as 
+well as a default implementation. But the problem is that: ppl may use the default implementation accidantly.
+2 ways to aoid this accidant:
+
+1) a little bit ugly as we have 2 functions here
+virtual void error(const std::string& msg);
+protected void error_default(const std::string& msg)
+{
+    ...default action
+}
+2) looks slightly better, but lose the "protected"  (if it's public inheritance)
+virtual void error(const std::string& msg) = 0;
+void Base::error(const std::string& msg)
+{
+    ...default action
+}
+
+
+
+Worth to notice that it's possible to implement a pure virtual function in base class. And it will be available to all devired
+class(if it's a public inheritance), the derived have to customize their own version and if they want to reuse this part, they
+have to do:
+Derived::functuion(){
+   Base::function();   // say Base::function explicitly
+}
+
