@@ -1,4 +1,5 @@
-The fundamental advice of this Item is to consider alternatives to virtual functions when searching for a design for 
+
+FThe fundamental advice of this Item is to consider alternatives to virtual functions when searching for a design for 
 the problem you're trying to solve. Here's a quick recap the alternatives we examined:
 Use the non-virtual interface idiom (NVI idiom), a form of the Template Method design pattern that wraps public non-virtual 
 member functions around less accessible virtual functions.
@@ -18,3 +19,5 @@ A disadvantage of moving functionality from a member function to a function outs
 lacks access to the class's non-public members.
 tr1::function objects act like generalized function pointers. Such objects support all callable entities compatible with a 
 given target signature.
+
+http://www.cs.uml.edu/~arum/classes/computing-iii-fall2014/slides/John%20Kilgo%20-%20Computing%20III%20Presentation.pdf
