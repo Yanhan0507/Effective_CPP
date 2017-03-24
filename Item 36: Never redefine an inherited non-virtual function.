@@ -1,0 +1,22 @@
+ Never redefine an inherited non-virtual function.
+ 
+ 
+ class B {
+  public:
+    void mf();
+ }
+ 
+ class D: public B{...};
+ 
+ as it's static binding:
+ 
+ 
+D x;
+B *pb = &x;
+D *pd = &x;
+
+pb and pd may have different results, which might be weird.
+
+Item 32 mentions that: public inheritance means 'is-a' relationship
+Item 34 mentions that: non-virtual function means both interface and implementation are required.
+
