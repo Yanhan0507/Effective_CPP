@@ -1,0 +1,22 @@
+Two different functions can be inherited:
+1) virtual
+2) non-virtual   -> this kind of function should not be redefined. So we will only discuss the first case.
+
+The reason is that: default parameters are statically bound, while static parameters are dynamically bound.
+(for runtime effiency)
+
+Class Shape{
+  virtual draw(Color = red){}
+}
+
+Rectangle: public Shape{
+  virtual draw(Color = green){}
+}
+
+Shape *ps =new Rectangle
+
+ps -> draw()  it will draw a 'Rectangle' with 'Red'. 
+
+Things to remember；
+Never redefine an inherited default parameter value, because default parameter values are statically bound, while virtual 
+functions - only functions you should be redefining - are dynamically bound.
