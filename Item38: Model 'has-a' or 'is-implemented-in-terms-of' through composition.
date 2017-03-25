@@ -1,0 +1,13 @@
+Model 'has-a' or 'is-implemented-in-terms-of' through composition.
+
+
+1 Application domain (people, vehicles, video frames)
+ 
+2 Implementation domain (buffers, mutexes, buffers ad search trees)
+
+When composition occurs between objects in the application domain, ut expresses a has-a relatinship. When
+it occurs in the implementation domain, it expresses an is-implemented-in-terms-of relationship.
+
+Things to remember:
+Composition has meanings completely different from that of public inheritance.
+In the application domain, composition means has-a. In the implementation dmain, it means is-implemented-in-terms-of.
