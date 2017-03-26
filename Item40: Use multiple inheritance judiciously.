@@ -1,0 +1,50 @@
+class BorrowableItem { // something a library lets you borrow
+public:
+void checkOut(); // check the item out from the library
+...
+};
+
+class ElectronicGadget {
+private:
+bool checkOut() const; // perform self-test, return whether
+... // test succeeds
+};
+
+
+class MP3Player: public BorrowableItem, public ElectronicGadget
+{ ... }; 
+MP3Player mp;
+mp.checkOut(); // ambiguous! which checkOut?
+
+
+Note that in this example, the call to checkOut is ambiguous, even though only one of the two functions is accessible. 
+(checkOut is public in BorrowableItem but private in ElectronicGadget.) That's in accord with the C++ rules for resolving 
+calls to overloaded functions: before seeing whether a function is accessible, C++ first identifies the function that's t
+he best match for the call. It checks accessibility only after finding the best-match function. In this case, both checkOuts 
+are equally good matches, so there's no best match. The accessibility of ElectronicGadget::checkOut is therefore never 
+examined. To resolve the ambiguity, you must specify which base class's function to call:
+mp.BorrowableItem::checkOut(); 
+
+
+class File { ... };
+class InputFile: virtual public File { ... };
+class OutputFile: virtual public File { ... };
+class IOFile: public InputFile, public OutputFile
+{ ... };
+That can lead to what is sometimes known as the "deadly MI diamond"
+Without virtual keyword, the data in the File class will be replicated.
+
+(1) classes derived from virtual bases that require initialization must be aware of their virtual bases, 
+no matter how far distant the bases are, and 
+(2) when a new derived class is added to the hierarchy, 
+it must assume initialization responsibilities for its virtual bases (both direct and indirect).
+(File will only be implemented once and IOFile should take the responsbility to initialize the File class)
+
+Things to Remember
+Multiple inheritance is more complex than single inheritance. It can lead to new ambiguity issues and 
+to the need for virtual inheritance.
+Virtual inheritance imposes costs in size, speed, and complexity of initialization and assignment. 
+It's most practical when virtual base classes have no data.
+Multiple inheritance does have legitimate uses. One scenario involves combining public inheritance 
+from an Interface class with private inheritance from a class that helps with implementation.
+
