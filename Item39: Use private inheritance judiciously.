@@ -1,0 +1,105 @@
+Difference for private inheritance
+1)Implicit converting will not be applied to private inheritance
+2)All members inherited from a private base class become private members of derived class.
+Therefore, private inheritance means nothing during software design, only during software implementation.
+
+When given a hierarchy in which a class Student publicly inherits from a class Person, 
+implicitly convert Students to Persons when that is necessary for a function call to succeed.
+
+class Person { ... };
+
+class Student: private Person { ... }; // inheritance is now private
+
+void eat(const Person& p); // anyone can eat
+void study(const Student& s); // only students study
+Person p; // p is a Person
+Student s; // s is a Student
+eat(p); // fine, p is a Person
+eat(s); // error! a Student isn't a Person
+
+
+
+When to use private inheritance:
+
+1) Private inheritance means is-implemented-in-terms of. It's usually inferior to composition, 
+but it makes sense when a derived class needs access to protected base class members or needs 
+to redefine inherited virtual functions.
+
+class Timer {
+
+public:
+
+explicit Timer(int tickFrequency);
+
+virtual void onTick() const; // automatically called for each tick
+
+...
+
+};
+
+class Widget: private Timer {
+
+private:
+
+virtual void onTick() const; // look at Widget usage data, etc.
+
+...
+
+};
+
+Alteratively:
+
+class Widget {
+
+private:
+
+class WidgetTimer: public Timer {
+
+public:
+
+virtual void onTick() const;
+
+...
+
+};
+
+WidgetTimer timer;
+
+...
+
+};
+
+2)
+
+Unlike composition, private inheritance can enable the empty base optimization. 
+This can be important for library developers who strive to minimize object sizes.
+
+
+class Empty {}; // has no data, so objects should
+
+// use no memory
+
+class HoldsAnInt { // should need only space for an int
+
+private:
+
+int x;
+
+Empty e; // should require no memory
+
+};
+
+
+
+sizeof(HoldsAnInt) > sizeof(int)
+
+
+class HoldsAnInt: private Empty {
+
+private:
+
+int x;
+
+};
+
+sizeof(HoldsAnInt) = sizeof(int)
