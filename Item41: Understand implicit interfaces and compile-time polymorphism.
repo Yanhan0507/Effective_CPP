@@ -1,0 +1,50 @@
+Template: Implicit interface (whatever is a valid expression) and compile-time polymorphism 
+(template instantiation and function overloading resolution).
+
+On the other hand, OOP: Explicit interface (function signature) and runtime polymorphism (virtual function)
+
+OOP:
+
+class Widget { 
+public: 
+Widget (); 
+virtual ~ Widget (); 
+virtual std :: size_t size () const; 
+virtual void normalize (); 
+void swap (Widget & other); / / see Item 25 
+
+... 
+}; 
+
+he void doProcessing (Widget & w) 
+{ 
+if (w.size ()> 10 && w! = someNastyWidget) { 
+Widget temp (w); 
+temp.normalize (); 
+temp.swap (w); 
+} 
+} 
+
+Template programming:
+template <typename T> 
+to void doProcessing (T & w) 
+{ 
+if (w.size ()> 10 && w! = someNastyWidget) { 
+T. Temp (w); 
+temp.normalize (); 
+temp.swap (w); 
+} 
+} 
+
+
+
+Things to Remember: 
+
+Classes (class) and templates (template) support interfaces (interface) and polymorphism (polymorphism). 
+
+For classes (classes), interfaces (interface) is explicit (explicit) function signatures (function identification features).
+polymorphism (polymorphism) virtual functions (virtual function) at runtime. 
+
+For template parameters (template parameter), interfaces (interface) is implicit (implicit) and based on valid expressions 
+(legal expression). polymorphism (polymorphism) through template instantiation (template instantiation) and function 
+overloading resolution (function overload resolution) at compile time. 
