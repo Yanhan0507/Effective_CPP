@@ -1,0 +1,58 @@
+When declaring template parameters, class and typename are interchangeable:
+template<class T> class Widget; // uses "class"
+template<typename T> class Widget; // uses "typename"
+The above two cases are same.
+
+template<typename C>
+void print2nd(const C& container){
+  C::const_iterator * x;
+  ...
+}
+
+[What if C had a static data member that happened to be named const_iterator, 
+and what if x happened to be the name of a global variable? In that case, the 
+code above wouldn't declare a local variable, it would be a multiplication of 
+C::const_iterator by x! Sure, that sounds crazy, but it's possible, and people 
+who write C++ parsers have to worry about all possible inputs, even the crazy ones.
+
+until C is known, there's no way to know whether C::const_iterator is a type or isn't, 
+and when the template print2nd is parsed, C isn't known. C++ has a rule to resolve this 
+ambiguity: if the parser encounters a nested dependent name in a template, it assumes that 
+the name is not a type unless you tell it otherwise. By default, nested dependent names are not types. ]
+
+
+Therefore: we should tell compiler that it's a typename:
+
+We do that by putting typename immediately in front of it:
+
+typename C::const_iterator iter(container.begin());
+
+
+
+The exception to the "typename must precede nested dependent type names" rule 
+is that typename must not precede nested dependent type names in a list of 
+base classes or as a base class identifier in a member initialization list. For example:
+
+template<typename T>
+class Derived: public Base<T>::Nested { // base class list: typename not allowed
+public:
+    explicit Derived(int x)
+    : Base<T>::Nested(x) // base class identifier in mem init. list: typename not allowed
+    { 
+        typename Base<T>::Nested temp; // use of nested dependent type
+        ...
+     } 
+};
+
+
+We can use typedef to simply the syntax: (see the below example)
+
+typedef typename std::iterator_traits<IterT>::value_type value_type;
+value_type temp(*iter);
+
+
+
+
+When declaring template parameters, class and typename are interchangeable.
+Use typename to identify nested dependent type names, except in base class 
+lists or as a base class identifier in a member initialization list.
