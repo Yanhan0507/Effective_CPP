@@ -1,0 +1,66 @@
+3 ways:
+  1  this->sendClear(info);                // okay, assumes that
+  2   using MsgSender<Company>::sendClear;   // tell compilers to assume that sendClear is in the base class
+  3    MsgSender<Company>::sendClear(info);      // okay, assumes that sendClear will be inherited
+(This is generally the least desirable way to solve the problem, because if the function being called is virtual, 
+explicit qualification turns off the virtual binding behavior.)
+
+
+Things to Remember
+
+In derived class templates, refer to names in base class templates via a "this->" prefix, 
+via using declarations, or via an explicit base class qualification.
+
+Problem:
+
+template<typename Company>
+
+class LoggingMsgSender: public MsgSender<Company> {
+
+public:
+
+  ...
+
+  void sendClearMsg(const MsgInfo& info)
+
+  {
+
+    write "before sending" info to the log;
+
+
+
+    sendClear(info);                          // if Company == CompanyZ,   sendClear is a function in 
+                                              // base class MsgSender<Company>
+
+                                              // this function doesn't exist!
+    write "after sending" info to the log;
+
+  }
+
+  ...
+  
+  Because compiler wont know if sendClear exists or not in MsgSender<Company> until instantiation.
+  
+  For example:
+The class below may not even have the problem
+
+template<>                                 // a total specialization of
+
+class MsgSender<CompanyZ> {                // MsgSender; the same as the
+
+public:                                    // general template, except
+
+  ...                                      // sendCleartext is omitted
+
+  void sendSecret(const MsgInfo& info)
+
+  { ... }
+
+};
+
+
+If we use the 3 methods above, the problem for CompanyZ will be postponed until compile actually saw we used it:
+LoggingMsgSender<CompanyZ> zMsgSender;
+MsgInfo msgData;
+...                                          // put info in msgData
+zMsgSender.sendClearMsg(msgData);            // error! won't compile
