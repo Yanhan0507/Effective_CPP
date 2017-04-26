@@ -1,0 +1,39 @@
+Smart pointers are good. But one of the things that real pointers do well is support implicit conversions. 
+Derived class pointers implicitly convert into base class pointers, pointers 
+to non-const objects convert into pointers to const objects, etc. 
+
+
+template<typename T>
+
+class SmartPtr {
+
+public:
+
+template<typename U>
+
+SmartPtr(const SmartPtr<U>& other) // initialize this held ptr
+
+: heldPtr(other.get()) { ... } // with other's held ptr
+
+
+
+T* get() const { return heldPtr; }
+
+...
+
+
+We use the member initialization list to initialize SmartPtr<T>'s data member of 
+type T* with the pointer of type U* held by the SmartPtr<U>. This will compile 
+only if there is an implicit conversion from a U* pointer to a T* pointer, and 
+that's precisely what we want. The net effect is that SmartPtr<T> now has a 
+eneralized copy constructor that will compile only if passed a parameter of a 
+compatible type.
+
+The utility of member function templates isn't limited to constructors. Another 
+common role for them is in support for assignment.
+
+
+Things to Remember
+Use member function templates to generate functions that accept all compatible types.
+If you declare member templates for generalized copy construction or generalized assignment, 
+you'll still need to declare the normal copy constructor and copy assignment operator, too.
