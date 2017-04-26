@@ -50,6 +50,7 @@ should often be able to use a single underlying implementation for each member f
 Typically, this means implementing member functions that work with strongly typed pointers (i.e., T* pointers) 
 by having them call functions that work with untyped pointers (i.e., void* pointers!!!). Some implementations of 
 the standard C++ library do this for templates like vector, deque, and list.
+
 Things to Remember:
 
 Templates generate multiple classes and multiple functions, 
