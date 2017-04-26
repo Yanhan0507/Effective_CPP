@@ -48,11 +48,8 @@ In most platforms, all pointer types have the same binary representation, so tem
 holding pointer types (e.g., list<int*>, list<const int*>, list<SquareMatrix<long, 3>*>, etc.) 
 should often be able to use a single underlying implementation for each member function. 
 Typically, this means implementing member functions that work with strongly typed pointers (i.e., T* pointers) 
-by having them call functions that work with untyped pointers (i.e., void* pointers). Some implementations of 
-the standard C++ library do this for templates like vector, deque, and list. If you're concerned about code bloat 
-arising in your templates, you'll probably want to develop templates that do the same thing.
-
-
+by having them call functions that work with untyped pointers (i.e., void* pointers!!!). Some implementations of 
+the standard C++ library do this for templates like vector, deque, and list.
 Things to Remember:
 
 Templates generate multiple classes and multiple functions, 
