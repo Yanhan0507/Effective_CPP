@@ -1,0 +1,65 @@
+template<typename T,           // template for n x n matrices of
+        std::size_t n>        // objects of type T; see below for info
+class SquareMatrix {           // on the size_t parameter
+public:
+  ...
+  void invert();              // invert the matrix in place
+};
+
+
+SquareMatrix<double, 5> sm1;
+sm1.invert();                  // call SquareMatrix<double, 5>::invert
+SquareMatrix<double, 10> sm2;
+sm2.invert();                  // call SquareMatrix<double, 10>::invert
+
+Two copies of invert will be instantiated here. 
+The two functions will be the same. This is a classic way for template-induced code bloat to arise.
+
+
+template<typename T>                   // size-independent base class for
+
+class SquareMatrixBase {               // square matrices
+
+protected:
+
+  ...
+
+  void invert(std::size_t matrixSize); // invert matrix of the given size
+
+  ...
+
+};
+
+
+Solution: Move size-independent code to Base class
+
+template<typename T, std::size_t n>
+class SquareMatrix: private SquareMatrixBase<T> {
+private:
+  using SquareMatrixBase<T>::invert;   // avoid hiding base version of
+                                       // invert; see Item 33
+public:
+  ...
+  void invert() { this->invert(n); }   // make inline call to base class
+};        
+
+
+In most platforms, all pointer types have the same binary representation, so templates 
+holding pointer types (e.g., list<int*>, list<const int*>, list<SquareMatrix<long, 3>*>, etc.) 
+should often be able to use a single underlying implementation for each member function. 
+Typically, this means implementing member functions that work with strongly typed pointers (i.e., T* pointers) 
+by having them call functions that work with untyped pointers (i.e., void* pointers). Some implementations of 
+the standard C++ library do this for templates like vector, deque, and list. If you're concerned about code bloat 
+arising in your templates, you'll probably want to develop templates that do the same thing.
+
+
+Things to Remember:
+
+Templates generate multiple classes and multiple functions, 
+so any template code not dependent on a template parameter causes bloat.
+
+Bloat due to non-type template parameters can often be eliminated by 
+replacing template parameters with function parameters or class data members.
+
+Bloat due to type parameters can be reduced by sharing implementations for instantiation 
+types with identical binary representations.
