@@ -1,0 +1,54 @@
+Item 24 explains why only non-member functions are eligible for implicit type conversions 
+on all arguments, and it uses as an example the operator* function for a Rational class. 
+
+Same way as item24 wont work here:
+
+
+template<typename T>
+class Rational {
+public:
+Rational(const T& numerator = 0, const T& denominator = 1);
+const T numerator() const; // see Item 28 for why return
+const T denominator() const; // values are still passed by value
+};
+
+// define * as a non-member function
+template<typename T>
+const Rational<T> operator*(const Rational<T>& lhs,
+const Rational<T>& rhs)
+{ ... }
+
+
+As in Item 24, we want to support mixed-mode arithmetic, so we want the code below to compile. We expect that it will, 
+because we're using the same code that works in Item 24. The only difference is that Rational and operator* are 
+now templates:
+
+Rational<int> oneHalf(1, 2); 
+Rational<int> result = oneHalf * 2; // error! won't compile
+
+The second argument passed to operator* (2) is of type int. How are compilers to figure out what T is in this case? 
+You might expect them to use Rational<int>'s non-explicit constructor to convert 2 into a Rational<int>, thus 
+allowing them to deduce that T is int, but they don't do that. They don't, because implicit type conversion 
+functions are never considered during template argument deduction. Never. 
+
+
+Way to fix it:
+template<typename T>
+
+class Rational {
+public:
+// declaration and definition both required to avoid link errors.
+// friend is required, as it needs to be a non-member function.
+friend const Rational operator*(const Rational& lhs, const Rational& rhs)
+{
+return Rational(lhs.numerator() * rhs.numerator(), // same impl
+lhs.denominator() * rhs.denominator()); // as in
+} // Item 24
+
+};
+
+
+
+When writing a class template that offers functions related to the template that 
+support implicit type conversions on all parameters, define those functions as 
+friends inside the class template.
