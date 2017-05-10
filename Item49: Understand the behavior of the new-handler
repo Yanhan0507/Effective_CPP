@@ -1,0 +1,71 @@
+namespace std {
+  typedef void (*new_handler)();
+  new_handler set_new_handler(new_handler p) throw();
+}
+The "throw()" at the end of set_new_handler's declaration is an exception specification. 
+It essentially says that this function won't throw any exceptions.
+
+
+set_new_handler's parameter is a pointer to the function operator new should call if it can't allocate the requested memory. 
+The return value of set_new_handler is a pointer to the function in effect for that purpose before set_new_handler was called.
+
+template<typename T>              // "mixin-style" base class for
+class NewHandlerSupport{          // class-specific set_new_handler
+public:                           // support
+  static std::new_handler set_new_handler(std::new_handler p) throw();
+  static void * operator new(std::size_t size) throw(std::bad_alloc);
+  ...                             // other versions of op. new —
+                                  // see Item 52
+private:
+  static std::new_handler currentHandler;
+};
+
+template<typename T>
+std::new_handler
+NewHandlerSupport<T>::set_new_handler(std::new_handler p) throw()
+{
+ std::new_handler oldHandler = currentHandler;
+ currentHandler = p;
+ return oldHandler;
+}
+
+
+template<typename T>
+void* NewHandlerSupport<T>::operator new(std::size_t size)
+  throw(std::bad_alloc)
+{
+  NewHandlerHolder h(std::set_new_handler(currentHandler));
+  return ::operator new(size);
+}
+
+// this initializes each currentHandler to null
+template<typename T>
+std::new_handler NewHandlerSupport<T>::currentHandler = 0;
+
+With this class template, adding set_new_handler support to Widget is easy: 
+Widget just inherits from NewHandlerSupport<Widget>. (That may look peculiar, 
+but I'll explain in more detail below exactly what's going on.)
+T just helps to make sure that we can have different currentHandler (static member) per class.
+So that each class can call set_handler method in the base class and using/change the currenthandler 
+in base class.
+
+class Widget: public NewHandlerSupport<Widget> {
+
+  ...                          // as before, but without declarations for
+
+};                             // set_new_handler or operator new
+
+
+That's all Widget needs to do to offer a class-specific set_new_handler.
+
+
+
+
+1
+set_new_handler allows you to specify a 
+function to be called when memory allocation requests cannot be satisfied.
+
+2
+Nothrow new is of limited utility, because it applies only to memory 
+allocation; subsequent constructor calls may still throw exceptions.
+
