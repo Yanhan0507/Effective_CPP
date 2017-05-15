@@ -1,0 +1,45 @@
+There are many valid reasons for writing custom versions of new and delete, including improving performance, 
+debugging heap usage errors, and collecting heap usage information.
+
+To detect usage errors  
+To collect statistics about the use of dynamically allocated memory
+To increase the speed of allocation and deallocation
+To reduce the space overhead of default memory management
+To compensate for suboptimal alignment in the default allocator
+To cluster related objects near one another
+To obtain unconventional behavior
+
+
+A variety of programming mistakes can lead to data overruns (writing beyond the end of an allocated block) 
+and underruns (writing prior to the beginning of an allocated block). Custom operator news can overallocate 
+blocks so there's room to put known byte patterns ("signatures") before and after the memory made available 
+to clients. operator deletes can check to see if the signatures are still intact. If they're not, an overrun 
+or underrun occurred sometime during the life of the allocated block, and operator delete can log that fact, 
+along with the value of the offending pointer.
+
+static const int signature = 0xDEADBEEF;
+typedef unsigned char Byte;
+
+// this code has several flaws�see below
+void* operator new(std::size_t size) throw(std::bad_alloc)
+{
+using namespace std;
+size_t realSize = size + 2 * sizeof(int); // increase size of request so2
+// signatures will also fit inside
+void *pMem = malloc(realSize); // call malloc to get theactual
+if (!pMem) throw bad_alloc(); // memory
+// write signature into first and last parts of the memory
+*(static_cast<int*>(pMem)) = signature;
+*(reinterpret_cast<int*>(static_cast<Byte*>(pMem)+realSize-sizeof(int))) =
+signature;
+// return a pointer to the memory just past the first signature
+return static_cast<Byte*>(pMem) + sizeof(int);
+}
+
+There is a subtle problem above: Alignment.
+Many computer architectures require that data of particular types be placed in memory at particular kinds of addresses. 
+For example, an architecture might require that pointers occur at addresses that are a multiple of four (i.e., be four-byte 
+aligned) or that doubles must occur at addresses that are a multiple of eight (i.e., be eight-byte aligned). 
+Failure to follow such constraints could lead to hardware exceptions at runtime. Other architectures are more forgiving, 
+though they may offer better performance if alignment preferences are satisfied. For example, doubles may be aligned on 
+any byte boundary on the Intel x86 architecture, but access to them is a lot faster if they are eight-byte aligned.
